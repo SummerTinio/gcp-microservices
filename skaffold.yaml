@@ -1,0 +1,21 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    # manifests === all dirs we want to sync
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+  # image === images produced from sync'd dir
+    - image: summertinio/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # src === the set of files u want Skaffold to watch
+          - src:  'src/**/*.ts'
+            dest: . # where to put our files
