@@ -1,0 +1,50 @@
+## auth-depl, auth-srv (ClusterIP)
+
+### FOR THE DEPLOYMENT ###
+# apiVersion === version of Kubernetes' API u wanna use
+apiVersion: apps/v1
+# kind === the type of Kubernetes Object u want (e.g. Deployment, Service)
+kind: Deployment
+metadata:
+  # name === Use this name when referencing this particular object in other k8s files!
+  name: auth-depl
+
+### FOR EACH POD ###
+# spec 1d === specifications for EACH POD (in a Deployment)
+spec:
+  # replicas === in 1 Pod, how many Copies of that image?
+  replicas: 1
+  # ***selector here***
+  selector:
+    matchLabels:
+        app: auth
+  # template === exact instructions on how to create that Pod
+  template:
+    metadata:
+      # ***must match with label here***
+      labels:
+        app: auth
+
+    ### FOR EACH CONTAINER ###
+    # spec 2d === specifications for EACH CONTAINER (in a Pod)
+    spec:
+      containers:
+        # container name === used for logging purposes
+        - name: auth-container
+          image: summertinio/auth
+---
+### FOR THE SERVICE ASSOCIATED WITH THIS DEPLOYMENT ###
+## i.e. our access point into its pods ##
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv # reference this name if you need to in a different file
+spec:
+  type: ClusterIP
+  selector:
+    app: auth # must match label given to individual Pod
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000 # ClusterIP port -- specifically attached to the Service. Note: nodePort will be 30000+
+      targetPort: 3000 # port from ur Express server -- specifically attached to the Pod (dynamic)

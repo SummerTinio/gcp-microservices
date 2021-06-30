@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-service
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    # tells nginx to expect use of RegExp
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+  rules:
+    # host === pretend domain name w/c we can only connect to on our local machine
+    - host: ticketing.dev
+      http:
+        paths:
+          # path === regEx for path -- will apply to /api/users/:anything
+          - path: /api/users/?(.*)
+            backend:
+              # auth-srv === a reference to another Kubernetes object
+              serviceName: auth-srv
+              # servicePort === Port assigned to that particular object
+              servicePort: 3000
