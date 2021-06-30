@@ -15,8 +15,11 @@ spec:
         paths:
           # path === regEx for path -- will apply to /api/users/:anything
           - path: /api/users/?(.*)
+            pathType: Prefix # also required in v1
             backend:
               # auth-srv === a reference to another Kubernetes object
-              service.name: auth-srv
+              service:
+                name: auth-srv
               # servicePort === Port assigned to that particular object
-              service.port.number: 3000
+                port:
+                  number: 3000
