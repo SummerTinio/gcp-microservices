@@ -31,7 +31,7 @@ spec:
       containers:
         # container name === used for logging purposes
         - name: auth-container
-          image: summertinio/auth
+          image: us.gcr.io/ticketing-dev-318410/auth
 ---
 ### FOR THE SERVICE ASSOCIATED WITH THIS DEPLOYMENT ###
 ## i.e. our access point into its pods ##

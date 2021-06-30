@@ -6,12 +6,16 @@ deploy:
     manifests:
       - ./infra/k8s/*
 build:
-  local:
-    push: false
+  #local:
+  #  push: false
+  # googleCloudBuild === random ID assigned to yoyur GCP Project (e.g. pacific-destiny-23123)
+  googleCloudBuild:
+    projectId: ticketing-dev-318410
+    
   artifacts:
   # image === images produced from sync'd dir
-    - image: summertinio/auth
-      context: auth
+    - image: us.gcr.io/ticketing-dev-318410/auth # used to be summertinio/auth -- but since we're on GCP, format is: us.gcr.io/[projectId]/[context (below)]
+      context: auth # "auth" reflected in us.grc.io path in the line right above
       docker:
         dockerfile: Dockerfile
       sync:
