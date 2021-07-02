@@ -30,8 +30,10 @@ spec:
     spec:
       containers:
         # container name === used for logging purposes
-        - name: auth-container
-          image: us.gcr.io/ticketing-dev-318410/auth
+        - name: auth # used to be auth-container
+          image: us.gcr.io/ticketing-dev-318410/auth #:68590a2
+          stdin: true # added this
+          tty: true # and this
 ---
 ### FOR THE SERVICE ASSOCIATED WITH THIS DEPLOYMENT ###
 ## i.e. our access point into its pods ##

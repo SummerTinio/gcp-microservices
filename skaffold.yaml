@@ -4,7 +4,7 @@ deploy:
   kubectl:
     # manifests === all dirs we want to sync
     manifests:
-      - ./infra/k8s/*
+      - ./auth/infra/k8s/*
 build:
   #local:
   #  push: false
@@ -21,5 +21,5 @@ build:
       sync:
         manual:
           # src === the set of files u want Skaffold to watch
-          - src:  'src/**/*.ts'
+          - src:  './auth/src/**/*.ts' # used to be 'src/**/*.ts'
             dest: . # where to put our files
