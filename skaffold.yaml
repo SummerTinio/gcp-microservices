@@ -2,7 +2,7 @@ apiVersion: skaffold/v2alpha3
 kind: Config
 deploy:
   kubectl:
-    # manifests === all dirs we want to sync
+    # manifests === all dirs we want to sync # i.e. the Kkubernetes yaml or json mainfests
     manifests:
       - ./auth/infra/k8s/*
 build:
@@ -21,5 +21,5 @@ build:
       sync:
         manual:
           # src === the set of files u want Skaffold to watch
-          - src:  './auth/src/**/*.ts' # used to be 'src/**/*.ts'
-            dest: . # where to put our files
+          - src:  './auth/src/**/*.ts' # used to be 'src/**/*.ts' # glob pattern to matchh local paths against
+            dest: . # destination path in the container where files should be sync'd to
