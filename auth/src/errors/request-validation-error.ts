@@ -12,7 +12,7 @@ class RequestValidationError extends Error {
   // and: errors: ValidationError[]
   constructor(public errors: ValidationError[]) {
     super();
-    // this.errors = errors; // gives
+    // this.errors = errors;
     // setting subclass prototype explicitly in constructor
     // since we're extending a built-in class
     Object.setPrototypeOf(this, RequestValidationError.prototype);
