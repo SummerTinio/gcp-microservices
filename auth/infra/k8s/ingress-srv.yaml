@@ -3,8 +3,8 @@ kind: Ingress
 metadata:
   name: ingress-service
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: / # test this out if it 
-    kubernetes.io/ingress.class: nginx
+    # nginx.ingress.kubernetes.io/rewrite-target: / # test this out if it 
+    kubernetes.io/ingress.class: "nginx"
     # tells nginx to expect use of RegExp
     nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
@@ -14,7 +14,7 @@ spec:
       http:
         paths:
           # path === regEx for path -- will apply to /api/users/:anything
-          - path: /api/users/?(.*)
+          - path: / # used to be /api/users/?(.*)
             pathType: Prefix # also required in v1
             backend:
               # auth-srv === a reference to another Kubernetes object
