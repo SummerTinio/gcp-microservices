@@ -2,7 +2,7 @@
 // import Request and Response types from express --> to type req & res objects
 import express, { Request, Response } from 'express';
 // middleware to validate user input
-import { body } from 'express-validator';
+import { body, validationResult } from 'express-validator';
 
 const router = express.Router();
 
@@ -16,11 +16,22 @@ router.post('/api/users/signup', [
     .withMessage('Password must be betwewen 4 and 20 characters'),
 ],
 (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  // get validation result
+  const errors = validationResult(req);
+
+  // give user feedback on validation result
+  if (!errors.isEmpty()) {
+    const errorsArray = errors.array(); // turns list of validation errors into an array
+    // status code 400 === Bad Request (client error)
+    return res.status(400).send(errorsArray);
+  }
 
   // create a new User on Mongoose
+  const { email, password } = req.body;
 
-  res.send('signing up!');
+  console.log('Creating a user...');
+
+  res.send({ email, password });
 });
 
 export { router as signUpRouter };
