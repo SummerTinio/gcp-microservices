@@ -5,6 +5,7 @@ import { currentUserRouter } from './routes/route-currentUser';
 import { signInRouter } from './routes/route-signIn';
 import { signUpRouter } from './routes/route-signUp';
 import { signOutRouter } from './routes/route-signOut';
+import errorHandlerMW from './middlewares/errorHandlerMW';
 
 const morgan = require('morgan');
 
@@ -21,6 +22,9 @@ app.use(signUpRouter);
 app.get('/', (req, res) => {
   res.send('you\'re on the / endpoint!');
 });
+
+// catch-all error-handling middleware to enforce consistency across the board
+app.use(errorHandlerMW);
 
 const devPort = 3000;
 app.listen(devPort, () => {
