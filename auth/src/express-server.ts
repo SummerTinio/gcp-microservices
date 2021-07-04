@@ -51,7 +51,8 @@ const startDb = async function startMongoConnection() {
     let uri: any;
 
     if (process.env.NODE_ENV === 'development') {
-      uri = `mongodb://localhost:27017/${ms}`;
+      const localMongoDbPort = 14440;
+      uri = `mongodb://localhost:${localMongoDbPort}/${ms}`;
     } else if (process.env.NODE_ENV === 'production') {
       // will automatically create a db collection named after ms
       uri = `mongodb://${mongodbService}:27017/${ms}`; // from mongoDB service itself, e.g. metadata.name === auth-mongo-srv
