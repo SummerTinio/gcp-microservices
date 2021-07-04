@@ -37,7 +37,7 @@ app.all('*', async (req, res, next) => {
   throw new NotFoundError();
 });
 
-const devPort = 3000;
+const PORT = process.env.PORT || 3000;
 
 // latest version of node supports await keyword at top level,
 // but depending on VM's node version, node image might not support it.
@@ -47,20 +47,31 @@ const startDb = async function startMongoConnection() {
 
   const mongodbService = `${ms}-mongo-srv`;
 
-  // will automatically create a db collection named after ms
-  const uri = `mongodb://${mongodbService}:27017/${ms}`; // from mongoDB service itself, e.g. metadata.name === auth-mongo-srv
-  tryCatcher(async () => {
+  try {
+    let uri: any;
+
+    if (process.env.NODE_ENV === 'development') {
+      uri = `mongodb://localhost:27017/${ms}`;
+    } else if (process.env.NODE_ENV === 'production') {
+      // will automatically create a db collection named after ms
+      uri = `mongodb://${mongodbService}:27017/${ms}`; // from mongoDB service itself, e.g. metadata.name === auth-mongo-srv
+    }
+
     await mongoose.connect(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
+
     console.log('connected to db!');
 
-    app.listen(devPort, () => {
-      console.log(`Listening on Port ${devPort}!`);
+    app.listen(PORT, () => {
+      console.log(`Listening on Port ${PORT}!`);
     });
-  });
+  } catch (err) {
+    console.log(`caught you from express-server.ts! err === ${err}`);
+    console.error(err);
+  }
 };
 
 startDb();
