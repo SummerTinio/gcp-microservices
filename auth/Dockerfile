@@ -16,4 +16,4 @@ RUN npm install
 COPY . .
 
 # must be CMD [] -- not RUN npm start .. or else Skaffold will get stuck & be unable to deploy.
-CMD ["npm", "run", "start"] 
+CMD ["npm", "run", "start:prod"] 
