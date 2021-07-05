@@ -2,7 +2,7 @@
 
 // ValidationError === TS type describing requirements we need
 import { ValidationError } from 'express-validator';
-import CustomError from './custom-error';
+import CustomError from 'errors/custom-error';
 
 class RequestValidationError extends CustomError {
   // private === private fields class syntax.
