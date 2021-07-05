@@ -1,24 +1,6 @@
 import mongoose from 'mongoose';
 import Password from 'services/password';
-
-// userAttrs === User attributes interface ***to ensure TS complains***
-// if you request mongodb to create a new user with the wrong options
-interface UserAttrs {
-  email: string;
-  password: string;
-}
-
-// interface to tell TS properties/methods expected on a User mongoose.Document
-interface UserDoc extends mongoose.Document {
-  email: string;
-  password: string;
-  // if we need extra properties on a document, add them here.
-}
-
-// interface to tell TS properties/methods expected on a User mongoose.Model
-interface UserModel extends mongoose.Model<UserDoc> {
-  build(userAttributes: UserAttrs): UserDoc;
-}
+import { UserAttrs, UserDoc, UserModel } from 'models/interface-mongoose';
 
 const userSchema = new mongoose.Schema({
   email: { // for Mongoose validation, not TS-related.
@@ -30,7 +12,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-});
+},
+  { // mongoose-specific implementation of toJson() method override
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id; // deletes old _id
+        delete ret.password;
+        delete ret.__v; // deletes versionKey
+      }
+    }
+  },
+);
 
 // Mongoose middleware to intercept a save attempt
 // eslint-disable-next-line prefer-arrow-callback
