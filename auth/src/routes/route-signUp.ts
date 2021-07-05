@@ -3,11 +3,14 @@
 import express, { Request, Response } from 'express';
 
 // middleware to validate user input
-import { body, validationResult } from 'express-validator';
+import { body } from 'express-validator';
 
 // specific Error subclasses to throw from inside route callback
-import RequestValidationError from '../errors/request-validation-error';
-import DatabaseConnectionError from '../errors/database-connection-error';
+import validateRequest from 'middlewares/validate-request'
+import DatabaseConnectionError from 'errors/database-connection-error';
+import User from 'models/user';
+import BadRequestError from 'errors/bad-request-error';
+import addJwt from 'helpers/jwt-factory';
 
 const router = express.Router();
 
@@ -20,24 +23,28 @@ router.post('/api/users/signup', [
     .isLength({ min: 4, max: 20 })
     .withMessage('Password must be between 4 and 20 characters'),
 ],
-(req: Request, res: Response) => {
-  // get validation result
-  const errors = validationResult(req);
+  validateRequest,
+  async (req: Request, res: Response) => {
+    const { email, password } = req.body;
 
-  // give user feedback on validation result if errors exist.
-  // will NOT work if you simply do "if (errors)"
-  // .isEmpty() must be invoked -- it's not just a property.
-  if (!errors.isEmpty()) {
-    throw new RequestValidationError(errors.array());
-  }
+    const existingUser = await User.findOne({ email });
 
-  // create a new User on Mongoose
-  const { email, password } = req.body;
+    if (existingUser) {
+      throw new BadRequestError('Email in use');
+    }
 
-  console.log('Creating a user...');
-  throw new DatabaseConnectionError();
+    const newUser = User.build({ email, password });
 
-  res.send({ email, password });
-});
+    try {
+      await newUser.save();
+    } catch (err) {
+      throw new DatabaseConnectionError();
+    }
+
+    addJwt(req, newUser);
+
+    // status code 201 === Created
+    res.status(201).send({ email });
+  });
 
 export { router as signUpRouter };

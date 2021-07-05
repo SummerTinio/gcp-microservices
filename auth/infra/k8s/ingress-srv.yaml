@@ -8,13 +8,18 @@ metadata:
     # tells nginx to expect use of RegExp
     nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
+  defaultBackend:
+    service:
+      name: auth-srv
+      port:
+        number: 3000
   rules:
     # host === pretend domain name w/c we can only connect to on our local machine
-    - host: ticketing.dev
+    - host: ticketing.test
       http:
         paths:
           # path === regEx for path -- will apply to /api/users/:anything
-          - path: / # used to be /api/users/?(.*)
+          - path: /api/users/?(.*) # used to be /
             pathType: Prefix # also required in v1
             backend:
               # auth-srv === a reference to another Kubernetes object

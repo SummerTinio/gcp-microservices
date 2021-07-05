@@ -4,7 +4,8 @@
   "description": "",
   "main": "express-server.js",
   "scripts": {
-    "start": "nodemon --legacy-watch src/express-server.ts"
+    "start": "NODE_ENV=development JWT_KEY=smnsmn NODE_PATH=./src nodemon --legacy-watch src/express-server.ts",
+    "start:prod": "NODE_ENV=production NODE_PATH=./src nodemon --legacy-watch src/express-server.ts"
   },
   "keywords": [],
   "author": "",
@@ -23,10 +24,15 @@
   "dependencies": {
     "@swc/core": "^1.2.62",
     "@swc/wasm": "^1.2.62",
+    "@types/cookie-session": "^2.0.42",
+    "@types/jsonwebtoken": "^8.5.3",
     "body-parser": "^1.19.0",
+    "cookie-session": "^1.4.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "express-validator": "^6.12.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.13.2",
     "morgan": "^1.10.0",
     "node-notifier": "^10.0.0",
     "nodemon": "^2.0.9",

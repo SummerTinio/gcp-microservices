@@ -1,4 +1,5 @@
-## auth-depl, auth-srv (ClusterIP)
+## auth-depl, auth-srv, auth-mongo, auth-mongo-srv
+## all srv's inside this file === ClusterIP
 
 ### FOR THE DEPLOYMENT ###
 # apiVersion === version of Kubernetes' API u wanna use
@@ -34,13 +35,23 @@ spec:
           image: us.gcr.io/ticketing-dev-318410/auth #:68590a2
           stdin: true # added this
           tty: true # and this
+          env:
+            - name: JWT_KEY # name of env variable as it shows up in that container's process.env
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret # how u named your secret (k get secrets)
+                  key: JWT_KEY # key you set
 ---
 ### FOR THE SERVICE ASSOCIATED WITH THIS DEPLOYMENT ###
 ## i.e. our access point into its pods ##
+
+### FOR THE SERVICE ###
 apiVersion: v1
 kind: Service
 metadata:
   name: auth-srv # reference this name if you need to in a different file
+
+### FOR THE CLUSTERIP ###
 spec:
   type: ClusterIP
   selector:
@@ -49,4 +60,50 @@ spec:
     - name: auth
       protocol: TCP
       port: 3000 # ClusterIP port -- specifically attached to the Service. Note: nodePort will be 30000+
+
+      ### FROM THE EXPRESS SERVER ###
       targetPort: 3000 # port from ur Express server -- specifically attached to the Pod (dynamic)
+---
+# for auth's own MongoDB instance
+
+### FOR THE DEPLOYMENT ###
+apiVersion: apps/v1
+kind: Deployment # to create a pod w/ 1 container
+metadata:
+  name: auth-mongo-depl
+
+### FOR EACH POD ###
+spec:
+  replicas: 1
+  selector:
+    matchLabels: # matchLabels will allow the Deployment to find the pods it created
+      app: auth-mongo # *** match this ***
+  template:
+    metadata:
+      labels:
+        app: auth-mongo # *** to this (label will be applied to the pod) ***
+    
+    ### FOR EACH CONTAINER ###
+    spec:
+      containers:
+        - name: auth-mongo # pod name === container name (in this case)
+          image: mongo
+---
+### FOR THE SERVICE ###
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-mongo-srv
+
+### FOR THE CLUSTERIP ###
+spec:
+  type: ClusterIP
+  selector:
+    app: auth-mongo # "apply auth-mongo-srv to whatever has label app: auth-mongo" .. i.e. our Pod
+  ports:
+    - name: db # for logging purposes -- for this port
+      protocol: TCP
+      port: 27017 # port === targetPort (in this case, since 1 pod === 1 container)
+
+      ### FROM THE MONGODB SERVER ###
+      targetPort: 27017 # port from ur mongodb server. 
