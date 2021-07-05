@@ -35,6 +35,12 @@ spec:
           image: us.gcr.io/ticketing-dev-318410/auth #:68590a2
           stdin: true # added this
           tty: true # and this
+          env:
+            - name: JWT_KEY # name of env variable as it shows up in that container's process.env
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret # how u named your secret (k get secrets)
+                  key: JWT_KEY # key you set
 ---
 ### FOR THE SERVICE ASSOCIATED WITH THIS DEPLOYMENT ###
 ## i.e. our access point into its pods ##
