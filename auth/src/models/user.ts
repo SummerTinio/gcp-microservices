@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Password from 'services/password';
 
 // userAttrs === User attributes interface ***to ensure TS complains***
 // if you request mongodb to create a new user with the wrong options
@@ -31,9 +32,20 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+// Mongoose middleware to intercept a save attempt
+// eslint-disable-next-line prefer-arrow-callback
+userSchema.pre('save', async function (done) {
+  // to prevent re-hashing. only hash if modified!
+  if (this.isModified('password')) { // will return true if User.build() was finished already
+    const documentPassword = this.get('password');
+    const hashed = await Password.toHash(documentPassword);
+    this.set('password', hashed);
+  }
+  done();
+});
+
 // create a static method on the user Schema itself
 // so you can use it as an instance method on the User model
-
 // call User.build() instead of new User({ //attributes })
 // so that TS complains if you pass wrong/incomplete attributes
 userSchema.statics.build = (userAttributes: UserAttrs) => new User(userAttributes);
