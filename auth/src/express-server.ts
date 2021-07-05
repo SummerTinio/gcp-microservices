@@ -5,6 +5,7 @@ import express from 'express';
 require('express-async-errors'); // HAS to be right after express, or else async error catching won't work!
 
 import { json } from 'body-parser';
+import cookieSession from 'cookie-session';
 
 import { currentUserRouter } from 'routes/route-currentUser';
 import { signInRouter } from 'routes/route-signIn';
@@ -17,7 +18,14 @@ import startDb from './mongodb-starter';
 const morgan = require('morgan');
 
 const app = express();
+app.set('trust proxy', true); // traffic is being proxied THRU nginx. need to make express aware it's behind a proxy
 app.use(json());
+app.use(
+  cookieSession({
+    signed: false, // unencrypted JWT
+    secure: true, // requires HTTPS connection (i.e. encrypted TCP/IP)
+  })
+);
 app.use(morgan('dev'));
 
 // all routes are POST, except on /api/users/currentuser w/c is GET
