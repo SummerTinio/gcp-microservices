@@ -6,8 +6,10 @@ import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 
 // specific Error subclasses to throw from inside route callback
-import RequestValidationError from '../errors/request-validation-error';
-import DatabaseConnectionError from '../errors/database-connection-error';
+import RequestValidationError from 'errors/request-validation-error';
+import DatabaseConnectionError from 'errors/database-connection-error';
+import User from 'models/user';
+import BadRequestError from 'errors/bad-request-error';
 
 const router = express.Router();
 
@@ -20,7 +22,7 @@ router.post('/api/users/signup', [
     .isLength({ min: 4, max: 20 })
     .withMessage('Password must be between 4 and 20 characters'),
 ],
-(req: Request, res: Response) => {
+async (req: Request, res: Response) => {
   // get validation result
   const errors = validationResult(req);
 
@@ -31,13 +33,24 @@ router.post('/api/users/signup', [
     throw new RequestValidationError(errors.array());
   }
 
-  // create a new User on Mongoose
   const { email, password } = req.body;
 
-  console.log('Creating a user...');
-  throw new DatabaseConnectionError();
+  const existingUser = await User.findOne({ email });
 
-  res.send({ email, password });
+  if (existingUser) {
+    throw new BadRequestError('Email in use');
+  }
+
+  const newUser = User.build({ email, password });
+  
+  try {
+    await newUser.save();
+  } catch (err) {
+    throw new DatabaseConnectionError();
+  }
+
+  // status code 201 === Created
+  res.status(201).send({ email, password });
 });
 
 export { router as signUpRouter };
