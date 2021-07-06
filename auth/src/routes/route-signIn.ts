@@ -6,7 +6,6 @@ import jwt from 'jsonwebtoken';
 import validateRequest from 'middlewares/validate-request';
 import User from 'models/user';
 import Password from 'services/password';
-import addJwt from 'helpers/jwt-factory';
 
 const router = express.Router();
 
