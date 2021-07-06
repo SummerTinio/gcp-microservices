@@ -1,18 +1,29 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import app from '../express-server';
+
+import * as  dotenv from 'dotenv';
+import app from "express-server";
+
+dotenv.config({
+  path: './.env'
+}); // with process.env.JWT_KEY defined as 'alcofree'
 
 let mongodb: any;
 
 // hook to start new in-memory mongodb instance
 // runs before any test
 beforeAll(async () => {
-  mongodb = new MongoMemoryServer();
-  const mongodbUri = await mongodb.getUri();
-  
-  await mongoose.connect(mongodbUri, {
+
+  // from docs: Every MongoMemoryServer instance creates and starts a fresh 
+  // MongoDB server on some free port. You may start up several mongod simultaneously. 
+  // When you terminate your script or call stop(), the MongoDB server(s) will be automatically shutdown.
+  mongodb = await MongoMemoryServer.create();
+
+  const uri = await mongodb.getUri(); // differs based on available ephemeral port used
+
+  await mongoose.connect(uri, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true
   });
 });
 
