@@ -17,7 +17,7 @@ import startDb from './mongodb-starter';
 
 const morgan = require('morgan');
 
-const app = express();
+export const app = express();
 app.set('trust proxy', true); // traffic is being proxied THRU nginx. need to make express aware it's behind a proxy
 app.use(json());
 app.use(
@@ -47,8 +47,4 @@ app.all('*', async (req, res, next) => {
 
 startDb();
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Listening on Port ${PORT}!`);
-});
+export default { app };

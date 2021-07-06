@@ -1,6 +1,7 @@
 import BadRequestError from 'errors/bad-request-error';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
+import jwt from 'jsonwebtoken';
 
 import validateRequest from 'middlewares/validate-request';
 import User from 'models/user';
@@ -35,9 +36,22 @@ router.post('/api/users/signin',
       throw new BadRequestError('Invalid credentials');
     }
 
-    addJwt(req, existingUser);
+    // req = addJwt(req, existingUser);
+    // Generate JWT
+    const userJwt = jwt.sign(
+      {
+        id: existingUser.id,
+        email: existingUser.email
+      },
+      process.env.JWT_KEY!
+    );
 
-    res.status(200).send(existingUser);
+    // Store it on session object
+    req.session = {
+      jwt: userJwt
+    };
+
+    res.status(200).send({ currentUser: { id: existingUser.id, email: existingUser.email } });
   }
 );
 

@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 // import Request and Response types from express --> to type req & res objects
 import express, { Request, Response } from 'express';
-
+import jwt from 'jsonwebtoken';
 // middleware to validate user input
 import { body } from 'express-validator';
 
@@ -41,10 +41,22 @@ router.post('/api/users/signup', [
       throw new DatabaseConnectionError();
     }
 
-    addJwt(req, newUser);
+    // Generate JWT
+    const userJwt = jwt.sign(
+      {
+        id: newUser.id,
+        email: newUser.email
+      },
+      process.env.JWT_KEY!
+    );
+
+    // Store it on session object
+    req.session = {
+      jwt: userJwt
+    };
 
     // status code 201 === Created
-    res.status(201).send({ email });
+    res.status(201).send({ currentUser: { id: newUser.id, email: newUser.email } });
   });
 
 export { router as signUpRouter };

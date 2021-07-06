@@ -2,7 +2,7 @@ import { Request } from 'express';
 import jwt from 'jsonwebtoken';
 import cookieSession from 'cookie-session';
 
-import { UserDoc } from 'models/interface-mongoose';
+import { UserDoc } from 'types/interface-mongoose';
 
 const addJwt = function addJwtToReqSession(req: Request, normalizedUserDoc: UserDoc) {
   // Generate JWT

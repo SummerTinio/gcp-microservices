@@ -3,7 +3,7 @@ import { validationResult } from 'express-validator';
 import RequestValidationError from 'errors/request-validation-error';
 require('express-async-errors');
 
-const validateRequest = function (req: Request, res: Response, next: NextFunction) {
+const validateRequest = function validateReqBody(req: Request, res: Response, next: NextFunction) {
   // get result of validation
   const errors = validationResult(req);
 

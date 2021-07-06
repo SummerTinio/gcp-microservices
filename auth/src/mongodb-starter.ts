@@ -1,8 +1,11 @@
 // TS complains if you use import() here, since @types/express-async-errors
 // doesn't exist
 require('express-async-errors'); // HAS to be right after express, or else async error catching won't work!
-
 import mongoose from 'mongoose';
+
+import { app } from 'express-server';
+
+const PORT = process.env.PORT || 3000;
 
 // latest version of node supports await keyword at top level,
 // but depending on VM's node version, node image might not support it.
@@ -35,6 +38,10 @@ const startDb = async function startMongoConnection() {
     });
 
     console.log('connected to db!');
+    
+    app.listen(PORT, () => {
+      console.log(`Listening on Port ${PORT}!`);
+    });
 
   } catch (err) {
     console.log(`[${ms}] db-connection error: caught you from mongodb-starter.ts! err === ${err}`);
