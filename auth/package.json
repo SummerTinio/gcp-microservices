@@ -11,9 +11,10 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "moduleNameMapper": {
-      "*.ts": "<rootDir>/src/**/*.ts"
-    },
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
     "setupFilesAfterEnv": [
       "./src/test/setup.ts"
     ]
