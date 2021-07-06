@@ -10,7 +10,7 @@ WORKDIR /app
 COPY package.json .
 
 # then install all dependencies (node_modules)
-RUN npm install
+RUN npm install --only=prod
 
 # copy over everything from . (our current working directory), to . (/app 's current working dir)
 COPY . .
