@@ -11,5 +11,5 @@ declare global {
 export interface UserJwtPayload extends jwt.JwtPayload {
   id:  string;
   email: string;
-  iat: number;
+  iat?: number;
 }
