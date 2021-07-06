@@ -13,7 +13,7 @@ import { signUpRouter } from 'routes/route-signUp';
 import { signOutRouter } from 'routes/route-signOut';
 import errorHandlerMW from 'middlewares/errorHandlerMW';
 import NotFoundError from 'errors/not-found-error';
-import startDb from './mongodb-starter';
+import startDb from 'mongodb-starter';
 
 const morgan = require('morgan');
 
