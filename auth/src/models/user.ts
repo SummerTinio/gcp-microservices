@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import Password from 'services/password';
-import { UserAttrs, UserDoc, UserModel } from 'models/interface-mongoose';
+import { UserAttrs, UserDoc, UserModel } from 'types/interface-mongoose';
 
 const userSchema = new mongoose.Schema({
   email: { // for Mongoose validation, not TS-related.
