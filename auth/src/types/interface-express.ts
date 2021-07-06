@@ -9,4 +9,5 @@ declare global {
 export interface UserJwtPayload {
   id:  string;
   email: string;
+  iat: string;
 }
