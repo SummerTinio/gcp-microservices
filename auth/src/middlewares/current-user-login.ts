@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import cookieSession from 'cookie-session';
 
-import BadRequestError from '../errors/bad-request-error';
-import { UserJwtPayload } from '../models/interface-express';
+import BadRequestError from 'errors/bad-request-error';
+import { UserJwtPayload } from 'types/interface-express';
 
 // if you're logged in, set req.currentUser === jwt payload
 //  jwt payload contains id, email in plaintext
@@ -19,10 +19,10 @@ const currentUserLogIn = function attachJwtToReqCurrentUser(
 
   // if they ARE logged  in, set req.currentUser === jwt payload
   try {
-    const payload = (jwt.verify(
+    const payload = jwt.verify(
       req.session.jwt,
       process.env.JWT_KEY!
-    )) as UserJwtPayload;
+    ) as UserJwtPayload;
 
     req.currentUser = payload;
 
