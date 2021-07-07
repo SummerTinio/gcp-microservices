@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 
 import { app } from 'express-server';
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 // latest version of node supports await keyword at top level,
 // but depending on VM's node version, node image might not support it.
@@ -37,10 +37,16 @@ const startDb = async function startMongoConnection() {
       useCreateIndex: true,
     });
 
-    console.log('connected to db!');
-    
+    mongoose.connection.once('connecting', () => {
+      console.log(`[${ms}]: MongoDB connecting to ${uri}.`)
+    });
+
+    mongoose.connection.once('connected', () => {
+      console.log(`[${ms}]: MongoDB successfully connected to ${uri}!`)
+    });
+
     app.listen(PORT, () => {
-      console.log(`Listening on Port ${PORT}!`);
+      console.log(`[${ms}]: Listening on Port ${PORT}!`);
     });
 
   } catch (err) {

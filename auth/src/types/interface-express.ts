@@ -9,7 +9,7 @@ declare global {
 }
 
 export interface UserJwtPayload extends jwt.JwtPayload {
-  id:  string;
+  id: string;
   email: string;
   iat?: number;
 }

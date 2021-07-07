@@ -7,6 +7,19 @@ require('express-async-errors'); // HAS to be right after express, or else async
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 
+import { createRequire } from 'module';
+
+import * as  dotenv from 'dotenv';
+dotenv.config({
+  path: './.env' // specifically for this file, path: './.env' worked.
+});
+
+// createRequire(`${process.env.NODE_PATH}`);
+
+console.log(`NODE_PATH===${process.env.NODE_PATH}`)
+console.log(`JWT_KEY===${process.env.JWT_KEY}`)
+console.log(`PORT===${process.env.PORT}`)
+
 import { currentUserRouter } from 'routes/route-currentUser';
 import { signInRouter } from 'routes/route-signIn';
 import { signUpRouter } from 'routes/route-signUp';
@@ -14,6 +27,7 @@ import { signOutRouter } from 'routes/route-signOut';
 import errorHandlerMW from 'middlewares/errorHandlerMW';
 import NotFoundError from 'errors/not-found-error';
 import startDb from 'mongodb-starter';
+
 
 const morgan = require('morgan');
 
