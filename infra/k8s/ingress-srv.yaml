@@ -7,17 +7,17 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
     # tells nginx to expect use of RegExp
     nginx.ingress.kubernetes.io/use-regex: 'true'
-spec:
-  defaultBackend:
-    service:
-      name: auth-srv
-      port:
-        number: 3000
+spec: # note to self: do NOT change .yaml files before running skaffold delete.
+#  defaultBackend:
+#    service:
+#      name: auth-srv
+#      port:
+#        number: 3000
   rules:
     # host === pretend domain name w/c we can only connect to on our local machine
     - host: ticketing.test
-      http:
-        paths:
+      http: # paths are matched in lexical order of appearance on paths below!
+        paths: # <--- this is where we set up routing rules on how to get access to our app from outside
           # path === regEx for path -- will apply to /api/users/:anything
           - path: /api/users/?(.*) # used to be /
             pathType: Prefix # also required in v1
@@ -28,3 +28,10 @@ spec:
               # servicePort === Port assigned to that particular object
                 port:
                   number: 3000
+          - path: /?(.*) # catch all path
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-client-srv
+                port:
+                  number: 3001
