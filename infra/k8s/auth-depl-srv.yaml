@@ -10,7 +10,6 @@ metadata:
   # name === Use this name when referencing this particular object in other k8s files!
   name: auth-depl
 
-### FOR EACH POD ###
 # spec 1d === specifications for EACH POD (in a Deployment)
 spec:
   # replicas === in 1 Pod, how many Copies of that image?
@@ -19,6 +18,7 @@ spec:
   selector:
     matchLabels:
         app: auth
+### FOR EACH POD ###
   # template === exact instructions on how to create that Pod
   template:
     metadata:
