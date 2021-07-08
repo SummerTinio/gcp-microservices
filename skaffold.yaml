@@ -4,7 +4,7 @@ deploy:
   kubectl:
     # manifests === all dirs we want to sync # i.e. the Kkubernetes yaml or json mainfests
     manifests:
-      - ./auth/infra/k8s/*
+      - ./infra/k8s/*
 build:
   #local:
   #  push: false
