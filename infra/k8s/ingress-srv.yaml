@@ -10,13 +10,12 @@ metadata:
 spec: # note to self: do NOT change .yaml files before running skaffold delete.
   defaultBackend:
     service:
-      name: auth-srv
+      name: auth-client-srv
       port:
-        number: 3000
+        number: 3001
   rules:
     # host === pretend domain name w/c we can only connect to on our local machine
-    - host: ticketing.test
-      http: # paths are matched in lexical order of appearance on paths below!
+    - http: # paths are matched in lexical order of appearance on paths below!
         paths: # <--- this is where we set up routing rules on how to get access to our app from outside
           # path === regEx for path -- will apply to /api/users/:anything
           - path: /api/users/?(.*) # used to be /
