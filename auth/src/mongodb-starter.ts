@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 // but depending on VM's node version, node image might not support it.
 // so must wrap async fxn inside another variable
 const startDb = async function startMongoConnection() {
-  const ms = 'auth'; // name of microservice
+  const ms = process.env.MS; // name of microservice
 
   const mongodbService = `${ms}-mongo-srv`;
 
@@ -29,6 +29,13 @@ const startDb = async function startMongoConnection() {
     } else if (process.env.NODE_ENV === 'production') {
       // will automatically create a db collection named after ms
       uri = `mongodb://${mongodbService}:27017/${ms}`; // from mongoDB service itself, e.g. metadata.name === auth-mongo-srv
+   
+    } else if (process.env.NODE_ENV === 'test') {
+      // TO DO: FIX TESTS
+      
+      // const testMongoDbPort = 27017;
+      // uri = `mongodb://localhost:${testMongoDbPort}/${ms}`;
+      // uri = global.__MONGOINSTANCE.getUri();
     }
 
     await mongoose.connect(uri, {
@@ -37,10 +44,18 @@ const startDb = async function startMongoConnection() {
       useCreateIndex: true,
     });
 
-    console.log('connected to db!');
+    // if mongoose has successfully connected to db, 
+    if (mongoose.connection.readyState === 1) {
+      console.log(`[${ms}] Mongoose connected to MongoDB instance on uri: ${uri}`);
+    }
+    
+    // mongoose.connection event emitter not working
+    // mongoose.connection.on('connected', () => {
+    //   console.log('connected to db!');
+    // })
     
     app.listen(PORT, () => {
-      console.log(`Listening on Port ${PORT}!`);
+      console.log(`[${ms}] Express server: listening on Port ${PORT}!`);
     });
 
   } catch (err) {
@@ -49,4 +64,4 @@ const startDb = async function startMongoConnection() {
   }
 };
 
-export default startDb;
+startDb();

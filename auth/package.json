@@ -2,10 +2,10 @@
   "name": "auth",
   "version": "1.0.0",
   "description": "authentication microservice",
-  "main": "express-server.js",
+  "main": "mongodb-starter.js",
   "scripts": {
-    "start": "NODE_ENV=development JWT_KEY=smnsmn NODE_PATH=./src nodemon --legacy-watch src/express-server.ts",
-    "start:prod": "NODE_ENV=production NODE_PATH=./src  nodemon --legacy-watch src/express-server.ts",
+    "start": "NODE_ENV=development NODE_PATH=./src nodemon --legacy-watch src/mongodb-starter.ts",
+    "start:prod": "NODE_ENV=production NODE_PATH=./src  nodemon --legacy-watch src/mongodb-starter.ts",
     "test": "jest --watchAll --no-cache"
   },
   "jest": {
@@ -19,7 +19,7 @@
       "./src/test/setup.ts"
     ]
   },
-  "baseUrl": ".",           
+  "baseUrl": ".",
   "paths": {
     "*": [
       "*",
@@ -56,6 +56,7 @@
     "babel-jest": "^27.0.6",
     "body-parser": "^1.19.0",
     "cookie-session": "^1.4.0",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "express-validator": "^6.12.0",
