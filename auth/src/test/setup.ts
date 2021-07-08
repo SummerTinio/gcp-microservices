@@ -1,14 +1,11 @@
+process.env.NODE_ENV = 'test';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 
 import * as  dotenv from 'dotenv';
 import app from "express-server";
 
-dotenv.config({
-  path: './.env'
-}); // with process.env.JWT_KEY defined as 'alcofree'
-
-let mongodb: any;
+let mongodb: MongoMemoryServer;
 
 // hook to start new in-memory mongodb instance
 // runs before any test
@@ -19,9 +16,13 @@ beforeAll(async () => {
   // When you terminate your script or call stop(), the MongoDB server(s) will be automatically shutdown.
   mongodb = await MongoMemoryServer.create();
 
-  const uri = await mongodb.getUri(); // differs based on available ephemeral port used
+  console.log(`mongodb.instanceInfo===${mongodb.instanceInfo}. if this is undefined, it means instance isnt running.`)
+  const instanceUri = mongodb.getUri(); // differs based on available ephemeral port used
 
-  await mongoose.connect(uri, {
+  console.log(`instanceUri===${instanceUri}`);
+  (global as any).__MONGOINSTANCE = mongodb; // pu
+
+  await mongoose.connect(instanceUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   });
@@ -39,6 +40,9 @@ beforeEach(async () => {
 // stop mongodb instance,
 // close mongoose connection
 afterAll(async () => {
-  await mongodb.stop();
+  // const instance: MongoMemoryServer = (global as any).__MONGOINSTANCE;
+  // await instance.stop()
+  // await mongodb.stop();  
+  // await mongodb.stop();
   await mongoose.connection.close();
 })
