@@ -7,13 +7,28 @@ require('express-async-errors'); // HAS to be right after express, or else async
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 
+import * as  dotenv from 'dotenv';
+
+let dotenvPath;
+
+if (process.env.NODE_ENV === 'development') {
+  dotenvPath = './src/config/dev.env' // used to be './.env'
+} else if (process.env.NODE_ENV === 'production') {
+  dotenvPath = './src/config/prod.env'
+} else if (process.env.NODE_ENV  === 'test') {
+  dotenvPath = './src/config/test.env'
+}
+
+dotenv.config({
+  path: dotenvPath // specifically for this file, path: './.env' worked.
+});
+
 import { currentUserRouter } from 'routes/route-currentUser';
 import { signInRouter } from 'routes/route-signIn';
 import { signUpRouter } from 'routes/route-signUp';
 import { signOutRouter } from 'routes/route-signOut';
 import errorHandlerMW from 'middlewares/errorHandlerMW';
 import NotFoundError from 'errors/not-found-error';
-import startDb from './mongodb-starter';
 
 const morgan = require('morgan');
 
@@ -23,7 +38,7 @@ app.use(json());
 app.use(
   cookieSession({
     signed: false, // unencrypted JWT
-    secure: true, // requires HTTPS connection (i.e. encrypted TCP/IP)
+    secure: (process.env.NODE_ENV === 'production'), // only requires HTTPS connection (i.e. encrypted TCP/IP) when in production
   })
 );
 app.use(morgan('dev'));
@@ -44,7 +59,5 @@ app.get('/', (req, res) => {
 app.all('*', async (req, res, next) => {
   throw new NotFoundError();
 });
-
-startDb();
 
 export default { app };

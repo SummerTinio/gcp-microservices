@@ -10,7 +10,6 @@ import validateRequest from 'middlewares/validate-request'
 import DatabaseConnectionError from 'errors/database-connection-error';
 import User from 'models/user';
 import BadRequestError from 'errors/bad-request-error';
-import addJwt from 'helpers/jwt-factory';
 
 const router = express.Router();
 
