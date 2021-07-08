@@ -1,0 +1,36 @@
+### FOR THE DEPLOYMENT ###
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-client-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels: # to help Deployment find the set of pods it'll manage
+      app: auth-client # <--- this 
+
+  ### FOR THE PODS ###  
+  template:
+    metadata:
+      labels:
+        app: auth-client # <--- must match this
+    
+    ### FOR EACH CONTAINER ###
+    spec:
+      containers:
+        - name: auth-client
+          image: us.gcr.io/ticketing-dev-318410/auth-client # summertinio/auth-client # us.gcr.io/ticketing-dev-318410/auth-client # if from dockerhub, summertinio/auth-client
+---
+### FOR THHE SERVICE ###
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-client-srv
+spec:
+  selector: # <--- to help Service find its corresponding Deployment
+    app: auth-client # <--- must match to app: auth-client (whatever u named ur app)
+  ports:
+    - name: auth-client # for logging purposes
+      protocol: TCP
+      port: 3001
+      targetPort: 3001
