@@ -52,9 +52,9 @@ app.use(signUpRouter);
 // catch-all error-handling middleware to enforce consistency across the board
 app.use(errorHandlerMW);
 
-app.get('/', (req, res) => {
-  res.send('you\'re on the / endpoint!');
-});
+// app.get('/', (req, res) => {
+//  res.send('you\'re on the / endpoint!');
+// });
 
 app.all('*', async (req, res, next) => {
   throw new NotFoundError();
