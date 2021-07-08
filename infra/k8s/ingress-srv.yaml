@@ -8,11 +8,11 @@ metadata:
     # tells nginx to expect use of RegExp
     nginx.ingress.kubernetes.io/use-regex: 'true'
 spec: # note to self: do NOT change .yaml files before running skaffold delete.
-#  defaultBackend:
-#    service:
-#      name: auth-srv
-#      port:
-#        number: 3000
+  defaultBackend:
+    service:
+      name: auth-srv
+      port:
+        number: 3000
   rules:
     # host === pretend domain name w/c we can only connect to on our local machine
     - host: ticketing.test
