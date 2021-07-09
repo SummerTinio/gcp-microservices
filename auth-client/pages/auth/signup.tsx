@@ -7,7 +7,7 @@ import Router from 'next/router';
 import useRequest from 'hooks/useRequest';
 
 interface SignUpProps {
-  
+
 }
 
 interface SignUpState {
@@ -26,7 +26,7 @@ const SignUp: React.FC<SignUpProps> = function SignUpComponent() {
       email, password
     },
     onSuccess: () => {
-      Router.push('/');
+      return Router.push('/');
     }
   })
 
