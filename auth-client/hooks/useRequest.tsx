@@ -30,7 +30,7 @@ const useRequest = function useRequestHook({ url, method, body, onSuccess }: use
 
       setErrors(
         (<ul> 
-          {errorsArrayFromAPI.message.map((err, i) => (<li key={i}>err</li>))}
+          {errorsArrayFromAPI.map((err, i) => (<li key={i}>{err.message}</li>))}
         </ul>)
       )
     }
