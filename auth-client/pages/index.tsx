@@ -1,11 +1,11 @@
 import { NextPageContext } from 'next';
 import preconfiguredAxios from 'api/preconfiguredAxios';
 
-interface IndexProps {
+interface LandingPageProps {
 
 }
 
-const Index = function IndexComponent<IndexProps>({ currentUser }) {
+const LandingPage = function LandingPageComponent<LandingPageProps>({ currentUser }) {
   return (
     <>
       <h1>Landing Page </h1>
@@ -14,9 +14,9 @@ const Index = function IndexComponent<IndexProps>({ currentUser }) {
   );
 }
 
-Index.getInitialProps = async (context: NextPageContext) => {
+LandingPage.getInitialProps = async (context: NextPageContext) => {
  const response = await preconfiguredAxios(context).get('/api/users/currentuser');
   return response.data; // will return { currentUser: null } or { currentUser: { id: , email: , iat:  }}
 };
 
-export default Index;
+export default LandingPage;
