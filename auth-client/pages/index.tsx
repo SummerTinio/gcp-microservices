@@ -5,11 +5,11 @@ interface IndexProps {
 
 }
 
-const Index = function IndexComponent<IndexProps>({ data }) {
+const Index = function IndexComponent<IndexProps>({ currentUser }) {
   return (
     <>
       <h1>Landing Page </h1>
-      {data && data.currentUser}
+      {currentUser && <h2>Hey, {currentUser.email}!</h2>}
     </>
   );
 }
@@ -31,6 +31,7 @@ Index.getInitialProps = async ({ req }: NextPageContext) => {
 
     return data; // <-- will be accessible via Index.props.data
   }
+  return {};
 };
 
 export default Index;
