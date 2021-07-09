@@ -14,22 +14,22 @@ const Index = function IndexComponent<IndexProps>({ currentUser }) {
   );
 }
 
-Index.getInitialProps = async ({ req }: NextPageContext) => {
+Index.getInitialProps = async (context: NextPageContext) => {
   if (typeof window === 'undefined') { // i.e. if we're in a server envt, where the global object !== 'window'
     // we are on the server
     // make requests to the complete ingress-srv url
-    const { data } = await axios.get('http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser', {
-      headers: req.headers
+    const response = await axios.get('http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser', {
+      headers: context.req.headers
     })
-    return data; // <-- will be accessible via Index.props.data
+    return response.data; // <-- will be accessible via Index.props.data
   } else {
     // we are likely in the browser
     // destructure JSON API response from res.data
-    const { data } = await axios.get('/api/users/currentuser', {
-      headers: req.headers
+    const response = await axios.get('/api/users/currentuser', {
+      headers: context.req.headers
     })
 
-    return data; // <-- will be accessible via Index.props.data
+    return response.data; // <-- will be accessible via Index.props.data
   }
   return {};
 };
