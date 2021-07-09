@@ -1,5 +1,5 @@
 import { NextPageContext } from 'next';
-import axios from 'axios'
+import preconfiguredAxios from 'api/preconfiguredAxios';
 
 interface IndexProps {
 
@@ -15,23 +15,8 @@ const Index = function IndexComponent<IndexProps>({ currentUser }) {
 }
 
 Index.getInitialProps = async (context: NextPageContext) => {
-  if (typeof window === 'undefined') { // i.e. if we're in a server envt, where the global object !== 'window'
-    // we are on the server
-    // make requests to the complete ingress-srv url
-    const response = await axios.get('http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser', {
-      headers: context.req.headers
-    })
-    return response.data; // <-- will be accessible via Index.props.data
-  } else {
-    // we are likely in the browser
-    // destructure JSON API response from res.data
-    const response = await axios.get('/api/users/currentuser', {
-      headers: context.req.headers
-    })
-
-    return response.data; // <-- will be accessible via Index.props.data
-  }
-  return {};
+ const response = await preconfiguredAxios(context).get('/api/users/currentuser');
+  return response.data; // will return { currentUser: null } or { currentUser: { id: , email: , iat:  }}
 };
 
 export default Index;
