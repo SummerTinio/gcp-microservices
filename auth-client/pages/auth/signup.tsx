@@ -1,10 +1,13 @@
 import React, {
   useState,
 } from 'react';
-import axios from 'axios';
+
+import Router from 'next/router';
+
+import useRequest from 'hooks/useRequest';
 
 interface SignUpProps {
- // yo: string;
+  
 }
 
 interface SignUpState {
@@ -16,7 +19,16 @@ interface SignUpState {
 const SignUp: React.FC<SignUpProps> = function SignUpComponent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<Array<string> | string>([]);
+  const { doRequest, errors } = useRequest({
+    url: '/api/users/signup',
+    method: 'post',
+    body: {
+      email, password
+    },
+    onSuccess: () => {
+      Router.push('/');
+    }
+  })
 
   const emailHandleChange = ({ target }) => {
     setEmail(target.value);
@@ -28,34 +40,7 @@ const SignUp: React.FC<SignUpProps> = function SignUpComponent() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    try {
-      const response = await axios.post('/api/users/signup', {
-        email, password
-      }); // api response === accessible on response.data
-
-      console.log(response.data);
-    } catch (err) {
-      console.log(err.response.data.errors)
-      setErrors(err.response.data.errors);
-    }
-
-  }
-
-  const displayErrors = () => {
-    if (errors.length > 1) {
-      return (
-        <ul>
-          {errors.map((err, i) => <li key={i}>{err.message}</li>)}
-        </ul>
-      )
-    } 
-
-    return (
-      <>
-        {errors.message}
-      </>
-    )
+    doRequest(); // will automatically call provided onSuccess callback, if passed in as params
   }
 
   return (
@@ -69,7 +54,7 @@ const SignUp: React.FC<SignUpProps> = function SignUpComponent() {
         <label>Password</label>
         <input value={password} onChange={passwordHandleChange} type="password" className="form-control" />
       </div>
-      {displayErrors()}
+      {errors}
       <button>Sign Up</button>
     </form>
   );
