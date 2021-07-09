@@ -13,6 +13,7 @@ const useRequest = function useRequestHook({ url, method, body }: Props) {
 
   const doRequest = async () => {
     try {
+      setErrors(null);
       // access axios method using computed member access notation
       // e.g. if method === POST --> await axios.post(url, body)
       const response = await axios[method.toLowerCase()](url, body)
