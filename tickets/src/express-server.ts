@@ -37,6 +37,9 @@ import errorHandlerMW from 'common/middlewares/errorHandlerMW';
 import NotFoundError from 'common/errors/not-found-error';
 
 import { createTicketRouter } from 'routes/create-ticket-router';
+import { showTicketRouter } from 'routes/show-ticket-router';
+import { indexTicketRouter } from 'routes/index-ticket-router';
+
 import currentUserLogIn from 'common/middlewares/current-user-login';
 
 const morgan = require('morgan');
@@ -47,10 +50,12 @@ app.use(morgan('dev'));
 
 // import all express routers & use as middleware
 // app.use(currentUserRouter);
-
-
+// ### ROUTERS THAT DO NOT REQUIRE AUTH ###
+app.use(showTicketRouter);
+app.use(indexTicketRouter);
 
 app.use(currentUserLogIn); // only add this after cookieSession has been set, and only before secure/protected routes
+// ### ROUTERS THAT REQUIRE AUTH ###
 app.use(createTicketRouter);
 
 // catch-all error-handling middleware to enforce consistency across the board
