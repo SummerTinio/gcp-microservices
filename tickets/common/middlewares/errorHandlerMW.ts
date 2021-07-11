@@ -14,6 +14,8 @@ const errorHandlerMW = function catchAllErrorHandlingMiddleWare(
     return res.status(err.statusCode).send({ errors: err.serializeErrors() });
   }
 
+  console.log(`err is NOT an instanceof CustomError. caught you in errorHandlerMW! err === ${err}`);
+
   res.status(400).send({
     errors: [{ message: 'Something went wrong' }]
   });
