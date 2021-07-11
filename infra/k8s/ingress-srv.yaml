@@ -15,6 +15,7 @@ spec: # note to self: do NOT change .yaml files before running skaffold delete.
         number: 3001
   rules:
     # host === pretend domain name w/c we can only connect to on our local machine
+   # - host: 33.43.21.91 (or LoadBalancer External IP)
     - http: # paths are matched in lexical order of appearance on paths below!
         paths: # <--- this is where we set up routing rules on how to get access to our app from outside
           # path === regEx for path -- will apply to /api/users/:anything
@@ -25,6 +26,13 @@ spec: # note to self: do NOT change .yaml files before running skaffold delete.
               service:
                 name: auth-srv
               # servicePort === Port assigned to that particular object
+                port:
+                  number: 3000
+          - path: /api/tickets/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: tickets-srv
                 port:
                   number: 3000
           - path: /?(.*) # catch all path

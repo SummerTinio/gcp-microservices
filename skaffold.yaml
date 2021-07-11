@@ -34,3 +34,14 @@ build:
             dest: . # destination path in the container where files should be sync'd to
           - src: './auth-client/package.json'
             dest: .
+    - image: us.gcr.io/ticketing-dev-318410/tickets 
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          # src === the set of files u want Skaffold to watch
+          - src:  './tickets/src/**/*.ts' # used to be 'src/**/*.ts' # glob pattern to matchh local paths against
+            dest: . # destination path in the container where files should be sync'd to
+          - src: './tickets/package.json'
+            dest: .
