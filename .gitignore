@@ -6,3 +6,6 @@ bp
 config
 .env
 .next 
+.vscode
+common
+sum
