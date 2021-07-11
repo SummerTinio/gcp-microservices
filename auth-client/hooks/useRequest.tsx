@@ -28,11 +28,19 @@ const useRequest = function useRequestHook({ url, method, body, onSuccess }: use
       // console.log(err.response);
       const errorsArrayFromAPI = err.response.data.errors;
 
+      if (errorsArrayFromAPI.length > 1) {
+        setErrors(
+          (<ul> 
+            {errorsArrayFromAPI.map((err, i) => (<li key={i}>{err.message}</li>))}
+          </ul>)
+        )
+      } 
+
       setErrors(
-        (<ul> 
-          {errorsArrayFromAPI.map((err, i) => (<li key={i}>{err.message}</li>))}
-        </ul>)
-      )
+        <ul>
+          <li>{errorsArrayFromAPI}</li>
+        </ul>  
+      );
     }
   };
   
