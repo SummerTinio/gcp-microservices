@@ -7,9 +7,8 @@ const router = express.Router();
 
 router.post('/api/tickets', async (req: Request, res: Response) => {
   const tickets = await Tickets.find({}); 
-  if (tickets) {
-    res.status(200).send(tickets);
-  }
+  
+  res.send(tickets);
 });
  
 export { router as indexTicketRouter }
