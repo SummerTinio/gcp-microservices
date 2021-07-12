@@ -39,6 +39,7 @@ import NotFoundError from 'common/errors/not-found-error';
 import { createTicketRouter } from 'routes/create-ticket-router';
 import { showTicketRouter } from 'routes/show-ticket-router';
 import { indexTicketRouter } from 'routes/index-ticket-router';
+import { updateTicketRouter } from 'routes/update-ticket-router';
 
 import currentUserLogIn from 'common/middlewares/current-user-login';
 
@@ -57,7 +58,7 @@ app.use(indexTicketRouter);
 app.use(currentUserLogIn); // only add this after cookieSession has been set, and only before secure/protected routes
 // ### ROUTERS THAT REQUIRE AUTH ###
 app.use(createTicketRouter);
-
+app.use(updateTicketRouter);
 // catch-all error-handling middleware to enforce consistency across the board
 app.use(errorHandlerMW);
 
