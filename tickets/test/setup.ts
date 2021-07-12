@@ -11,8 +11,9 @@ let mongodb: MongoMemoryServer;
 global.signin = () => {// specifically for non-auth microservices:
   // Build a JWT payload. === { id, email, iat: }
   const plaintextPayload = {
-    id: '192455631',
-    email: 'jakesim@test.com'
+    id: new mongoose.Types.ObjectId().toHexString(),
+    email: `${new mongoose.Types.ObjectId().toHexString()}@test.com`
+
   }
 
   // Create the JWT using jwt.sign 
