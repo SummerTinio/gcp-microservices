@@ -5,6 +5,8 @@ import jwt from 'jsonwebtoken';
 import * as  dotenv from 'dotenv';
 import app from "express-server";
 
+jest.mock('stan-wrapper');
+
 let mongodb: MongoMemoryServer;
 
 // don't use async -- or TS will think ur returning a promise
@@ -58,6 +60,8 @@ beforeAll(async () => {
 
 // delete all existing db collections before every test
 beforeEach(async () => {
+  jest.clearAllMocks();
+  
   const collections = await mongoose.connection.db.collections();
 
   for (let collection of collections) {
