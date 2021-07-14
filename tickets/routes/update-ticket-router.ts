@@ -9,6 +9,10 @@ import NotAuthorizedError from 'common/errors/not-authorized-error';
 
 import Ticket from 'models/ticket-mongoose';
 
+import TicketUpdatedPublisher from '../events/publishers/ticket-updated-publisher';
+import stan from '../src/stan-wrapper';
+
+
 const router = express.Router();
 
 router.put('/api/tickets/:id',
@@ -43,6 +47,13 @@ router.put('/api/tickets/:id',
   });
 
   await ticket.save()
+
+  await new TicketUpdatedPublisher(stan.client).publish({
+    id: ticket.id,
+    title: ticket.title,
+    price: ticket.price,
+    userId: ticket.userId
+  });
 
   res.send(ticket);
 
