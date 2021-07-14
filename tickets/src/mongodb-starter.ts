@@ -4,6 +4,7 @@ require('express-async-errors'); // HAS to be right after express, or else async
 import mongoose from 'mongoose';
 
 import { app } from 'express-server';
+import stan from './stan-wrapper';
 
 const PORT = process.env.PORT || 3000;
 
@@ -38,6 +39,16 @@ const startDb = async function startMongoConnection() {
       // uri = global.__MONGOINSTANCE.getUri();
     }
 
+    await stan.connect('ticketing', 'random client id!', 'http://natsstreaming-srv:4222');
+
+    stan.client.on('close', () => {
+      console.log('NATS connection closed!');
+      process.exit();
+    });
+
+    process.on('SIGINT', () => stan.client.close());
+    process.on('SIGTERM', () => stan.client.close());
+
     await mongoose.connect(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -54,6 +65,8 @@ const startDb = async function startMongoConnection() {
     //   console.log('connected to db!');
     // })
     
+    // create stan client before listening to any traffic on express!
+
     app.listen(PORT, () => {
       console.log(`[${ms}] Express server: listening on Port ${PORT}!`);
     });
