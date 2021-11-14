@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: tickets
-          image: us.gcr.io/ticketing-dev-318410/tickets # summertinio/tickets # us.gcr.io/ticketing-dev-318410/tickets # if from dockerhub, summertinio/tickets
+          image: us.gcr.io/ticketing-239039/tickets # summertinio/tickets # us.gcr.io/ticketing-dev-318410/tickets # if from dockerhub, summertinio/tickets
           env:
             - name: MS
               value: tickets
