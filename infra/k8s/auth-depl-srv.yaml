@@ -32,7 +32,7 @@ spec:
       containers:
         # container name === used for logging purposes
         - name: auth # used to be auth-container
-          image: us.gcr.io/ticketing-dev-318410/auth #:68590a2
+          image: us.gcr.io/ticketing-239039/auth #:68590a2
           stdin: true # added this
           tty: true # and this
           env:
