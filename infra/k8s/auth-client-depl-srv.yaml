@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: auth-client
-          image: us.gcr.io/ticketing-dev-318410/auth-client # summertinio/auth-client # us.gcr.io/ticketing-dev-318410/auth-client # if from dockerhub, summertinio/auth-client
+          image: us.gcr.io/ticketing-239039/auth-client
 ---
 ### FOR THHE SERVICE ###
 apiVersion: v1
