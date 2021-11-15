@@ -14,7 +14,7 @@ build:
     
   artifacts: # <-- this is what actually sets up file-syncing
   # image === images produced from sync'd dir
-    - image: us.gcr.io/ticketing-dev-318410/auth # used to be summertinio/auth -- but since we're on GCP, format is: us.gcr.io/[projectId]/[context (below)]
+    - image: us.gcr.io/ticketing-239039/auth
       context: auth # "auth" reflected in us.grc.io path in the line right above
       docker:
         dockerfile: Dockerfile
