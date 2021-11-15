@@ -10,7 +10,7 @@ build:
   #  push: false
   # googleCloudBuild === random ID assigned to yoyur GCP Project (e.g. pacific-destiny-23123)
   googleCloudBuild:
-    projectId: ticketing-dev-318410
+    projectId: ticketing-239039
     
   artifacts: # <-- this is what actually sets up file-syncing
   # image === images produced from sync'd dir
@@ -23,7 +23,7 @@ build:
           # src === the set of files u want Skaffold to watch
           - src:  './auth/src/**/*.ts' # used to be 'src/**/*.ts' # glob pattern to matchh local paths against
             dest: . # destination path in the container where files should be sync'd to
-    - image: us.gcr.io/ticketing-dev-318410/auth-client # used to be summertinio/auth -- but since we're on GCP, format is: us.gcr.io/[projectId]/[context (below)]
+    - image: us.gcr.io/ticketing-239039/auth-client # used to be summertinio/auth -- but since we're on GCP, format is: us.gcr.io/[projectId]/[context (below)]
       context: auth-client # "auth" reflected in us.grc.io path in the line right above
       docker:
         dockerfile: Dockerfile
@@ -34,7 +34,7 @@ build:
             dest: . # destination path in the container where files should be sync'd to
           - src: './auth-client/package.json'
             dest: .
-    - image: us.gcr.io/ticketing-dev-318410/tickets 
+    - image: us.gcr.io/ticketing-239039/tickets 
       context: tickets
       docker:
         dockerfile: Dockerfile
